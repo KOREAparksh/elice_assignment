@@ -5,13 +5,14 @@
 1. 12/12(월)
 - [x] 플러터 버전 설정
 - [x] bloc, cubit 학습 및 선택
-- [x] 요구사항 추가사항 정리
+- [x] 요구사항 추가사항 정리 [link](https://github.com/KOREAparksh/elice_assignment/blob/main/documents/requirements.md)
 - [x] ~~api 정리 및 문서화~~ (과제 docs 참고)
 - [x] 사용할 라이브러리 정리 [link](https://github.com/KOREAparksh/elice_assignment/blob/main/documents/libraries.md)
-- [ ] 아키텍처 정리 및 문서화
-- [ ] 깃 메세지 컨벤션 정리
+- [x] 깃 메세지 컨벤션 정리
+- [x] ~~아키텍처 정리 및 문서화~~ (작업 중 추가 확인사항 있어 연장)
 
 2. 12/13(화)
+- [ ] 아키텍처 정리 및 문서화
 - [ ] 프로젝트 생성 및 설정
 - [ ] 공통코드(통신 등) 설계 (1h)
 - [ ] view 1 설계 (1h ~ 2h)
