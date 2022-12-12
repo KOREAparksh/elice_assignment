@@ -2,10 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:tutorial/bloc/count_bloc.dart';
 import 'dart:async';
 
-late final counter = CountBloc();
+late final counter;
 
-class TempView extends StatelessWidget {
+class TempView extends StatefulWidget {
   TempView({Key? key}) : super(key: key);
+
+  @override
+  State<TempView> createState() => _TempViewState();
+}
+
+class _TempViewState extends State<TempView> {
+  @override
+  void initState() {
+    super.initState();
+    counter = CountBloc();
+  }
+
+  @override
+  void dispose() {
+    counter.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
