@@ -5,9 +5,9 @@
 1. 12/12(월)
 - [x] 플러터 버전 설정
 - [x] bloc, cubit 학습 및 선택
-- [x] ~~요구사항 정리~~ (과제 docs 참고)
+- [x] 요구사항 추가사항 정리
 - [x] ~~api 정리 및 문서화~~ (과제 docs 참고)
-- [x] 사용할 라이브러리 정리
+- [x] 사용할 라이브러리 정리 [link](https://github.com/KOREAparksh/elice_assignment/blob/main/documents/libraries.md)
 - [ ] 아키텍처 정리 및 문서화
 - [ ] 깃 메세지 컨벤션 정리
 
