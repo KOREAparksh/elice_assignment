@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tutorial/bloc/count_bloc.dart';
-import 'dart:async';
-
-late final counter;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial/cubit/count_cubit.dart';
 
 class TempView extends StatefulWidget {
   TempView({Key? key}) : super(key: key);
@@ -15,12 +13,10 @@ class _TempViewState extends State<TempView> {
   @override
   void initState() {
     super.initState();
-    counter = CountBloc();
   }
 
   @override
   void dispose() {
-    counter.dispose();
     super.dispose();
   }
 
@@ -31,12 +27,14 @@ class _TempViewState extends State<TempView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            CountView(),
-            TextButton(onPressed: counter.plus, child: Text("더하기")),
-            TextButton(onPressed: counter.minus, child: Text("빼기")),
+            const Text('You have pushed the button this many times:'),
+            const CountView(),
+            TextButton(
+                onPressed: () => context.read<CountCubit>().increment(),
+                child: Text("더하기")),
+            TextButton(
+                onPressed: () => context.read<CountCubit>().decrement(),
+                child: Text("빼기")),
           ],
         ),
       ),
@@ -52,10 +50,8 @@ class CountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("123");
-    return StreamBuilder<int>(
-        stream: counter.countStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return Text(snapshot.data.toString());
-        });
+    return BlocBuilder<CountCubit, int>(
+      builder: (context, count) => Text(count.toString()),
+    );
   }
 }
