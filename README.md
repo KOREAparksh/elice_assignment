@@ -12,7 +12,7 @@
 - [x] ~~아키텍처 정리 및 문서화~~ (작업 중 추가 확인사항 있어 연장)
 
 2. 12/13(화)
-- [ ] 아키텍처 정리 및 문서화
+- [x] 아키텍처 정리 및 문서화
 - [ ] 프로젝트 생성 및 설정
 - [ ] 공통코드(통신 등) 설계 (1h)
 - [ ] view 1 설계 (1h ~ 2h)
@@ -24,6 +24,10 @@
 - [ ] 요구사항 재확인 및 적용확인
 - [ ] 여러 Device 설정
 - [ ] 제출
+
+## 구성도
+![](https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view1_diagram.png)
+![](https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view2_diagram.png)
 
 
 ## 유의사항
