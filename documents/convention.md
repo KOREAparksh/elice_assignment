@@ -7,6 +7,8 @@ main branch에 직접 commit
 branch를 분리하여 코드작업 진행
   - dev
   - ec-이슈번호
+
+  문서작업의 경우 dev/main에 바로
 - 개발 완료 후
 main branch에 직접 commit
 
