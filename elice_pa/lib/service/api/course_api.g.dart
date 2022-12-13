@@ -19,7 +19,7 @@ class _CourseApi implements CourseApi {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> getAllList({
+  Future<CourseDto> getAllList({
     offset = 0,
     count = 10,
   }) async {
@@ -30,8 +30,8 @@ class _CourseApi implements CourseApi {
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseDto>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -43,13 +43,12 @@ class _CourseApi implements CourseApi {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
+    final value = CourseDto.fromJson(_result.data!);
+    return value;
   }
 
   @override
-  Future<HttpResponse<dynamic>> getRecommendCourses({
+  Future<CourseDto> getRecommendCourses({
     free = false,
     recommended = true,
     offset = 0,
@@ -64,8 +63,8 @@ class _CourseApi implements CourseApi {
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseDto>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -77,13 +76,12 @@ class _CourseApi implements CourseApi {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
+    final value = CourseDto.fromJson(_result.data!);
+    return value;
   }
 
   @override
-  Future<HttpResponse<dynamic>> getFreeCourses({
+  Future<CourseDto> getFreeCourses({
     free = true,
     recommended = false,
     offset = 0,
@@ -98,8 +96,8 @@ class _CourseApi implements CourseApi {
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseDto>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -111,9 +109,8 @@ class _CourseApi implements CourseApi {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
+    final value = CourseDto.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
