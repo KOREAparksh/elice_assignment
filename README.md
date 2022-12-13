@@ -26,8 +26,12 @@
 - [ ] 제출
 
 ## 구성도
-![](https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view1_diagram.png)
-![](https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view2_diagram.png)
+<div>
+<img src="https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view1_diagram.png" width="50%"></div>
+
+<div>
+<img src="https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/view2_diagram.png" width="50%"></div>
+
 
 
 ## 유의사항
