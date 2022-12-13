@@ -103,9 +103,9 @@ class _MainScreenState extends State<MainScreen> {
     return BlocBuilder<FreeCourseCubit, FreeCourseState>(
       builder: (context, state) {
         if (state is FreeCourseLoaded) {
-          recommendCourses.clear();
-          recommendCourses.addAll(state.freeCourses.courses);
-          return CourseListView(courses: recommendCourses);
+          freeCourses.clear();
+          freeCourses.addAll(state.freeCourses.courses);
+          return CourseListView(courses: freeCourses);
         } else if (state is FreeCourseError) {
           return Text(state.message);
         }
