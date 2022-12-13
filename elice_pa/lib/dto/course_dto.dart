@@ -17,7 +17,7 @@ class CourseDto {
 @JsonSerializable()
 class Result {
   String status;
-  String reason;
+  String? reason;
 
   Result(this.status, this.reason);
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
@@ -26,13 +26,26 @@ class Result {
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Course {
-  String? logo_file_url;
+  String? logoFileUrl;
   String? title;
-  List<String> instructors;
+  List<Instructor> instructors;
   bool isDiscounted;
 
-  Course(this.logo_file_url, this.title, this.instructors, this.isDiscounted);
+  Course(this.logoFileUrl, this.title, this.instructors, this.isDiscounted);
 
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
   Map<String, dynamic> toJson() => _$CourseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class Instructor {
+  int id;
+  String fullname;
+  String firstname;
+
+  Instructor(this.id, this.fullname, this.firstname);
+
+  factory Instructor.fromJson(Map<String, dynamic> json) =>
+      _$InstructorFromJson(json);
+  Map<String, dynamic> toJson() => _$InstructorToJson(this);
 }
