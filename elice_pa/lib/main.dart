@@ -1,6 +1,10 @@
+import 'package:elice_pa/cubit/free_course_cubit.dart';
+import 'package:elice_pa/cubit/recommend_course_cubit.dart';
+import 'package:elice_pa/repository/course_repository.dart';
 import 'package:elice_pa/screen/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -18,7 +22,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainScreen(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<RecommendCourseCubit>(
+            create: (_) => RecommendCourseCubit(CourseRepository()),
+          ),
+          BlocProvider<FreeCourseCubit>(
+            create: (_) => FreeCourseCubit(CourseRepository()),
+          ),
+        ],
+        child: const MainScreen(),
+      ),
     );
   }
 }

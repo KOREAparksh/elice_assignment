@@ -1,6 +1,10 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/cubit/free_course_cubit.dart';
+import 'package:elice_pa/cubit/recommend_course_cubit.dart';
+import 'package:elice_pa/dto/course_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -12,10 +16,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   //Data
   int _selectedIndex = 0;
+  final List<Course> recommendCourses = [];
+  final List<Course> freeCourses = [];
 
   //MarginPadding
   final _appBarActionPadding = 14.0;
   final _bodyTopPadding = 22.0;
+  final _sidePadding = 16.0;
 
   //Asset
   final _logo = "assets/logo.png";
@@ -23,8 +30,18 @@ class _MainScreenState extends State<MainScreen> {
   //str
   final _recommendTitle = "추천 과목";
   final _freeTitle = "무료 과목";
+  final detailButtonText = "전체보기";
   final String _bottomNaviHome = "Home";
   final String _bottomNaviQR = "QR";
+
+  @override
+  void initState() {
+    super.initState();
+    final recommendCubit = context.read<RecommendCourseCubit>();
+    recommendCubit.getRecommendCourse();
+    final freeCubit = context.read<FreeCourseCubit>();
+    freeCubit.getFreeCourse();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +75,82 @@ class _MainScreenState extends State<MainScreen> {
     return Column(
       children: [
         SizedBox(height: _bodyTopPadding),
-        CourseListView(title: _recommendTitle),
+        _courseListTitle(title: _recommendTitle),
+        recommendCourseListView(),
         SizedBox(height: _bodyTopPadding),
-        CourseListView(title: _freeTitle),
+        _courseListTitle(title: _freeTitle),
+        freeCourseListView(),
       ],
+    );
+  }
+
+  Widget recommendCourseListView() {
+    return BlocBuilder<RecommendCourseCubit, RecommendCourseState>(
+      builder: (context, state) {
+        if (state is RecommendCourseLoaded) {
+          recommendCourses.clear();
+          recommendCourses.addAll(state.recommendCourses.courses);
+          return CourseListView(courses: recommendCourses);
+        } else if (state is RecommendCourseError) {
+          return Text(state.message);
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+
+  Widget freeCourseListView() {
+    return BlocBuilder<FreeCourseCubit, FreeCourseState>(
+      builder: (context, state) {
+        if (state is FreeCourseLoaded) {
+          recommendCourses.clear();
+          recommendCourses.addAll(state.freeCourses.courses);
+          return CourseListView(courses: recommendCourses);
+        } else if (state is FreeCourseError) {
+          return Text(state.message);
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+
+  Widget _courseListTitle({required String title}) {
+    return Padding(
+      padding: EdgeInsets.only(left: _sidePadding, right: _sidePadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _subjectTitle(title),
+          _detailTextButton(),
+        ],
+      ),
+    );
+  }
+
+  Text _subjectTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+
+  Widget _detailTextButton() {
+    return TextButton(
+      onPressed: _onTapDetailButton,
+      style: TextButton.styleFrom(
+        foregroundColor: buttonMainColor,
+        textStyle: Theme.of(context).textTheme.labelMedium,
+      ),
+      child: Text(
+        detailButtonText,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
     );
   }
 
@@ -89,109 +178,81 @@ class _MainScreenState extends State<MainScreen> {
       _selectedIndex = i;
     });
   }
+
+  void _onTapDetailButton() {}
 }
 
 class CourseListView extends StatelessWidget {
   const CourseListView({
     Key? key,
-    required this.title,
+    required this.courses,
   }) : super(key: key);
-  final title;
+
+  //Data
+  final List<Course> courses;
+
+  //String
+  final _defaultInstructor = "선생님 미등록";
+  final _defaultTitle = "제목이 정해지지 않음";
+  final _defaultUrl =
+      "https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1568953741/noticon/ufb0f5953bimc1njslya.png";
 
   //Size
   final _listHeight = 200.0;
   final _cardSeparateWidth = 10.0;
   final _sidePadding = 16.0;
 
-  //Text
-  final detailButtonText = "전체보기";
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _courseListTitle(context),
-        _courseList(),
+        SizedBox(
+          height: _listHeight,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: courses.length,
+            itemBuilder: _itemBuilder,
+            separatorBuilder: _separatorBuilder,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _courseListTitle(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: _sidePadding, right: _sidePadding),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _subjectTitle(),
-          _detailTextButton(context),
-        ],
+  Widget _itemBuilder(BuildContext context, int index) {
+    double leftPadding = (index == 0) ? _sidePadding : 0;
+    double rightPadding = (index == courses.length - 1) ? _sidePadding : 0;
+    String title = courses[index].title ?? _defaultTitle;
+    String instructors = _defaultInstructor;
+    if (courses[index].instructors.isNotEmpty) {
+      instructors = courses[index].instructors.first.fullname;
+    }
+
+    return Container(
+      margin: EdgeInsets.only(left: leftPadding, right: rightPadding),
+      child: CourseTile(
+        title: title + '\n',
+        url: courses[index].logoFileUrl ?? _defaultUrl,
+        instructor: instructors,
       ),
     );
   }
 
-  Text _subjectTitle() {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-
-  Widget _detailTextButton(BuildContext context) {
-    return TextButton(
-      onPressed: _onTapDetailButton,
-      style: TextButton.styleFrom(
-        foregroundColor: buttonMainColor,
-        textStyle: Theme.of(context).textTheme.labelMedium,
-      ),
-      child: Text(
-        detailButtonText,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    );
-  }
-
-  Widget _courseList() {
-    return SizedBox(
-      height: _listHeight,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 22,
-        cacheExtent: 22,
-        itemBuilder: (BuildContext context, int index) {
-          double leftPadding = (index == 0) ? _sidePadding : 0;
-          double rightPadding = (index == 22 - 1) ? _sidePadding : 0;
-          return Container(
-            margin: EdgeInsets.only(left: leftPadding, right: rightPadding),
-            child: CourseTile(
-              title: "캐글 문제 풀이로 배우는 데이터 분석",
-              instructor: "박승한 선생님",
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) =>
-            SizedBox(width: _cardSeparateWidth),
-      ),
-    );
-  }
-
-  void _onTapDetailButton() {}
+  Widget _separatorBuilder(BuildContext context, int index) =>
+      SizedBox(width: _cardSeparateWidth);
 }
 
 class CourseTile extends StatelessWidget {
-  const CourseTile(
-      {Key? key,
-      required this.title,
-      this.instructor = "선생님 미등록",
-      this.badge = "오프라인"})
-      : super(key: key);
+  const CourseTile({
+    Key? key,
+    required this.title,
+    required this.url,
+    this.instructor = "선생님 미등록",
+    this.badge = "오프라인",
+  }) : super(key: key);
   final String title;
   final String instructor;
+  final String url;
   final String badge;
 
   //info
@@ -211,9 +272,6 @@ class CourseTile extends StatelessWidget {
   //MarginPadding
   final _topBottomPadding = 10.0;
   final _sidePadding = 12.0;
-
-  final _tempLogo =
-      "https://cdn-api.elice.io/api/file/965383b87b6844efbf40e246bf55f13a/%E1%84%80%E1%85%AA%E1%84%86%E1%85%A9%E1%86%A8%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9%28208_208%29.png?se=2022-12-22T00%3A15%3A00Z&sp=rt&sv=2020-10-02&sr=b&sig=kneXE5f6/Ngghiz46%2BKWyY9VtFYtTIoMMxRFlnFQAmg%3D";
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +318,7 @@ class CourseTile extends StatelessWidget {
   Widget _courseLogo() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(_logoRadius),
-      child: Image.network(_tempLogo, width: _logoSize),
+      child: Image.network(url, width: _logoSize),
     );
   }
 
@@ -307,6 +365,8 @@ class CourseTile extends StatelessWidget {
   Text _instructorTextView() {
     return Text(
       instructor,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w400,
