@@ -15,6 +15,7 @@ class CustomDio {
     dio.interceptors.add(LogInterceptor(
       responseHeader: false,
       requestHeader: false,
+      responseBody: true,
     ));
     dio.interceptors.add(_CustomInterceptor());
   }
