@@ -23,6 +23,7 @@ class _QRScannerState extends State<QRScanner> {
 
   //String
   final _guideText = "QR 코드를 인식해주세요";
+  final _urlError = "유효하지 않는 주소입니다.";
 
   //size
   final _guideSize = 220.0;
@@ -97,8 +98,14 @@ class _QRScannerState extends State<QRScanner> {
   Future<void> _goWebView(Barcode barcode) async {
     String decoded = barcode.rawValue!;
     if (isText(barcode)) {
-      decoded = utf8.decode(base64Decode(barcode.rawValue!));
+      try {
+        decoded = utf8.decode(base64Decode(barcode.rawValue!));
+      } catch (e) {
+        showError();
+        return;
+      }
     } else if (isUrl(barcode) == false) {
+      showError();
       return;
     }
     await Navigator.push(
@@ -107,6 +114,13 @@ class _QRScannerState extends State<QRScanner> {
         builder: (_) => CustomWebView(url: decoded),
       ),
     );
+  }
+
+  void showError() {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(_urlError),
+    ));
   }
 
   bool isUrl(Barcode barcode) {
