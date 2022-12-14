@@ -1,3 +1,4 @@
+import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/repository/course_repository.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<CourseCubit>(
+          create: (_) => RecommendCourseCubit(CourseRepository()),
+        ),
         BlocProvider<RecommendCourseCubit>(
           create: (_) => RecommendCourseCubit(CourseRepository()),
         ),

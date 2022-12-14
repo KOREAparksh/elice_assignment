@@ -1,4 +1,5 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
@@ -38,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final recommendCubit = context.read<RecommendCourseCubit>();
-    recommendCubit.getRecommendCourse();
+    recommendCubit.getCourse();
     final freeCubit = context.read<FreeCourseCubit>();
-    freeCubit.getFreeCourse();
+    freeCubit.getCourse();
   }
 
   @override
@@ -114,13 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget recommendCourseListView() {
-    return BlocBuilder<RecommendCourseCubit, RecommendCourseState>(
+    return BlocBuilder<RecommendCourseCubit, CourseState>(
       builder: (context, state) {
-        if (state is RecommendCourseLoaded) {
+        if (state is CourseLoaded) {
           recommendCourses.clear();
-          recommendCourses.addAll(state.recommendCourses.courses);
+          recommendCourses.addAll(state.courses.courses);
           return CourseListView(courses: recommendCourses);
-        } else if (state is RecommendCourseError) {
+        } else if (state is CourseError) {
           return Text(state.message);
         }
         return const CircularProgressIndicator();
@@ -129,13 +130,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget freeCourseListView() {
-    return BlocBuilder<FreeCourseCubit, FreeCourseState>(
+    return BlocBuilder<FreeCourseCubit, CourseState>(
       builder: (context, state) {
-        if (state is FreeCourseLoaded) {
+        if (state is CourseLoaded) {
           freeCourses.clear();
-          freeCourses.addAll(state.freeCourses.courses);
+          freeCourses.addAll(state.courses.courses);
           return CourseListView(courses: freeCourses);
-        } else if (state is FreeCourseError) {
+        } else if (state is CourseError) {
           return Text(state.message);
         }
         return const CircularProgressIndicator();

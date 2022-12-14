@@ -1,4 +1,5 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
@@ -30,8 +31,9 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       RefreshController(initialRefresh: false);
 
   //Data
-  late final recommendCubit = context.read<RecommendCourseCubit>();
-  late final freeCubit = context.read<FreeCourseCubit>();
+  // late final recommendCubit = context.read<RecommendCourseCubit>();
+  // late final freeCubit = context.read<FreeCourseCubit>();
+  late final CourseCubit cubit;
   final List<Course> courses = [];
 
   //MarginPadding
@@ -41,6 +43,16 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   @override
   void initState() {
     super.initState();
+    switch (widget.courseType) {
+      case CourseType.RECOMMEND:
+        cubit = context.read<RecommendCourseCubit>() as CourseCubit;
+        break;
+      case CourseType.FREE:
+        cubit = context.read<FreeCourseCubit>() as CourseCubit;
+        break;
+      default:
+        cubit = context.read<RecommendCourseCubit>() as CourseCubit;
+    }
     courses.clear();
     courses.addAll(widget.initCourses);
   }
@@ -56,9 +68,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     return Scaffold(
       backgroundColor: bodyBackgroundColor,
       appBar: _appBar(),
-      body: BlocBuilder<RecommendCourseCubit, RecommendCourseState>(
-        builder: _blocBuilder,
-      ),
+      body: _blocBuilder(),
     );
   }
 
@@ -77,12 +87,31 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     );
   }
 
-  Widget _blocBuilder(context, state) {
-    if (state is RecommendCourseLoaded) {
-      courses.clear();
-      courses.addAll(state.recommendCourses.courses);
+  Widget _blocBuilder() {
+    switch (widget.courseType) {
+      case CourseType.RECOMMEND:
+        return BlocBuilder<RecommendCourseCubit, CourseState>(
+          builder: (context, state) {
+            if (state is CourseLoaded) {
+              courses.addAll(state.courses.courses);
+            } else if (state is CourseLoading) {}
+            return _listView();
+          },
+        );
+
+      case CourseType.FREE:
+        return BlocBuilder<FreeCourseCubit, CourseState>(
+          builder: (context, state) {
+            if (state is CourseLoaded) {
+              courses.addAll(state.courses.courses);
+            } else if (state is CourseLoading) {}
+            return _listView();
+          },
+        );
+
+      default:
+        return const Center(child: Text("type error"));
     }
-    return _listView();
   }
 
   Widget _listView() {
@@ -115,8 +144,16 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     );
   }
 
-  void _onRefresh() {
-    recommendCubit.getRecommendCourse();
+  void _onRefresh() async {
+    switch (widget.courseType) {
+      case CourseType.RECOMMEND:
+        cubit.getCourse();
+        break;
+      case CourseType.FREE:
+        cubit.getCourse();
+        break;
+    }
+    courses.clear();
     _refreshController.refreshCompleted();
   }
 }
