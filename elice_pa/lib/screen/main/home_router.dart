@@ -4,6 +4,7 @@ import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
 import 'package:elice_pa/screen/detail_course_screen.dart';
 import 'package:elice_pa/screen/main/home_screen.dart';
+import 'package:elice_pa/screen/main/qr_scanner.dart';
 import 'package:elice_pa/util/converter.dart';
 import 'package:elice_pa/widget/course_tile/course_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,15 +21,33 @@ class HomeRouter extends StatefulWidget {
 class _HomeRouterState extends State<HomeRouter> {
   //Data
   int _selectedIndex = 0;
+  PageController pageController = PageController();
 
   //String
   final String _bottomNaviHome = "Home";
   final String _bottomNaviQR = "QR";
 
+  //Screen
+  List<Widget> pages = [
+    const HomeScreen(),
+    const QRScanner(),
+  ];
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const HomeScreen(),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: _onPageChanged,
+        physics: const NeverScrollableScrollPhysics(),
+        children: pages,
+      ),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
@@ -52,9 +71,11 @@ class _HomeRouterState extends State<HomeRouter> {
     );
   }
 
+  void _onPageChanged(int index) {
+    setState(() => _selectedIndex = index);
+  }
+
   void _onTapNavigatorItem(int i) {
-    setState(() {
-      _selectedIndex = i;
-    });
+    pageController.jumpToPage(i);
   }
 }
