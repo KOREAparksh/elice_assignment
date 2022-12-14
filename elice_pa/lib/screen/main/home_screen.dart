@@ -2,11 +2,8 @@ import 'package:elice_pa/config/color.dart';
 import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
-import 'package:elice_pa/dto/course_dto.dart';
-import 'package:elice_pa/screen/detail_course_screen.dart';
-import 'package:elice_pa/util/converter.dart';
+import 'package:elice_pa/screen/course_list_screen.dart';
 import 'package:elice_pa/widget/course_list.dart';
-import 'package:elice_pa/widget/course_tile/course_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,6 +18,9 @@ class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  //Size
+  final _listHeight = 200.0;
 
   //MarginPadding
   final _appBarActionPadding = 14.0;
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailCourseScreen(
+        builder: (context) => const CourseListScreen(
           courseType: CourseType.RECOMMEND,
         ),
       ),
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailCourseScreen(
+        builder: (context) => const CourseListScreen(
           courseType: CourseType.FREE,
         ),
       ),
@@ -113,28 +113,34 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget recommendCourseListView() {
-    return BlocBuilder<RecommendCourseCubit, CourseState>(
-      builder: (context, state) {
-        if (state is CourseLoaded) {
-          return CourseListView(courses: state.courses);
-        } else if (state is CourseError) {
-          return Text(state.message);
-        }
-        return const CircularProgressIndicator();
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: _listHeight),
+      child: BlocBuilder<RecommendCourseCubit, CourseState>(
+        builder: (context, state) {
+          if (state is CourseLoaded) {
+            return CourseListView(courses: state.courses);
+          } else if (state is CourseError) {
+            return Text(state.message);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
   Widget freeCourseListView() {
-    return BlocBuilder<FreeCourseCubit, CourseState>(
-      builder: (context, state) {
-        if (state is CourseLoaded) {
-          return CourseListView(courses: state.courses);
-        } else if (state is CourseError) {
-          return Text(state.message);
-        }
-        return const CircularProgressIndicator();
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: _listHeight),
+      child: BlocBuilder<FreeCourseCubit, CourseState>(
+        builder: (context, state) {
+          if (state is CourseLoaded) {
+            return CourseListView(courses: state.courses);
+          } else if (state is CourseError) {
+            return Text(state.message);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 

@@ -11,22 +11,24 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 enum CourseType { RECOMMEND, FREE }
 
-class DetailCourseScreen extends StatefulWidget {
-  const DetailCourseScreen({
+class CourseListScreen extends StatefulWidget {
+  const CourseListScreen({
     Key? key,
     required this.courseType,
   }) : super(key: key);
   final courseType;
-  final _title = "무료 과목";
 
   @override
-  State<DetailCourseScreen> createState() => _DetailCourseScreenState();
+  State<CourseListScreen> createState() => _CourseListScreenState();
 }
 
-class _DetailCourseScreenState extends State<DetailCourseScreen> {
+class _CourseListScreenState extends State<CourseListScreen> {
   //Controller
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
+  //String
+  late final _title;
 
   //Data
   bool isFirst = true;
@@ -44,9 +46,11 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     switch (widget.courseType) {
       case CourseType.RECOMMEND:
         cubit = context.read<RecommendCourseCubit>();
+        _title = "추천 과목";
         break;
       case CourseType.FREE:
         cubit = context.read<FreeCourseCubit>();
+        _title = "무료 과목";
         break;
     }
     cubit.getCourse(temp: []);
@@ -73,7 +77,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       backgroundColor: appBarMainColor,
       centerTitle: true,
       title: Text(
-        widget._title,
+        _title,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -105,7 +109,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       _refreshController.refreshCompleted();
       _refreshController.loadComplete();
     } else if (state is CourseError) {
-      //Todo: error dialog
+      return Center(child: Text(state.message.toString()));
     } else if (state is CourseLoading && isFirst) {
       isFirst = false;
       return const Center(child: CircularProgressIndicator());

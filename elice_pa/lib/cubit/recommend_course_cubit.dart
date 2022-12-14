@@ -13,13 +13,15 @@ class RecommendCourseCubit extends CourseCubit {
       await Future.delayed(const Duration(milliseconds: 500));
       final courseDto =
           await courseRepository.fetchRecommendCourse(offset, count);
-      temp.addAll(courseDto.courses);
-      emit(CourseLoaded(courseDto.result, courseDto.courseCount, temp));
+      if (courseDto.result.status != "ok") {
+        throw Exception("api result not ok");
+      }
+      temp.addAll(courseDto.courses ?? []);
+      emit(CourseLoaded(courseDto.result, courseDto.courseCount ?? 0, temp));
     } on DioError catch (e) {
       emit(CourseError(e.message));
     } catch (e) {
-      print(e);
-      emit(const CourseError("Other Error"));
+      emit(CourseError(e.toString()));
     }
   }
 }
