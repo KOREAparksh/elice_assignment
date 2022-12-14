@@ -95,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DetailCourseScreen(
-          initCourses: recommendCourses,
           courseType: CourseType.RECOMMEND,
         ),
       ),
@@ -107,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DetailCourseScreen(
-          initCourses: freeCourses,
           courseType: CourseType.FREE,
         ),
       ),

@@ -7,7 +7,7 @@ class RecommendCourseCubit extends CourseCubit {
   @override
   Future<void> getCourse({int offset = 0, int count = 10}) async {
     try {
-      emit(CourseInitial());
+      emit(CourseLoading());
       final course = await courseRepository.fetchRecommendCourse(offset, count);
       emit(CourseLoaded(course));
     } on DioError catch (e) {

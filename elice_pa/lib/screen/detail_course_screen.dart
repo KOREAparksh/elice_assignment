@@ -14,11 +14,9 @@ enum CourseType { RECOMMEND, FREE }
 class DetailCourseScreen extends StatefulWidget {
   const DetailCourseScreen({
     Key? key,
-    required this.initCourses,
     required this.courseType,
   }) : super(key: key);
   final courseType;
-  final List<Course> initCourses;
   final _title = "무료 과목";
 
   @override
@@ -31,8 +29,6 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       RefreshController(initialRefresh: false);
 
   //Data
-  // late final recommendCubit = context.read<RecommendCourseCubit>();
-  // late final freeCubit = context.read<FreeCourseCubit>();
   late final CourseCubit cubit;
   final List<Course> courses = [];
 
@@ -45,16 +41,12 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     super.initState();
     switch (widget.courseType) {
       case CourseType.RECOMMEND:
-        cubit = context.read<RecommendCourseCubit>() as CourseCubit;
+        cubit = context.read<RecommendCourseCubit>();
         break;
       case CourseType.FREE:
-        cubit = context.read<FreeCourseCubit>() as CourseCubit;
+        cubit = context.read<FreeCourseCubit>();
         break;
-      default:
-        cubit = context.read<RecommendCourseCubit>() as CourseCubit;
     }
-    courses.clear();
-    courses.addAll(widget.initCourses);
   }
 
   @override
@@ -91,27 +83,22 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     switch (widget.courseType) {
       case CourseType.RECOMMEND:
         return BlocBuilder<RecommendCourseCubit, CourseState>(
-          builder: (context, state) {
-            if (state is CourseLoaded) {
-              courses.addAll(state.courses.courses);
-            } else if (state is CourseLoading) {}
-            return _listView();
-          },
+          builder: _builder,
         );
-
       case CourseType.FREE:
         return BlocBuilder<FreeCourseCubit, CourseState>(
-          builder: (context, state) {
-            if (state is CourseLoaded) {
-              courses.addAll(state.courses.courses);
-            } else if (state is CourseLoading) {}
-            return _listView();
-          },
+          builder: _builder,
         );
-
       default:
-        return const Center(child: Text("type error"));
+        return const Center(child: Text("error"));
     }
+  }
+
+  Widget _builder(context, state) {
+    if (state is CourseLoaded) {
+      courses.addAll(state.courses.courses);
+    } else if (state is CourseLoading) {}
+    return _listView();
   }
 
   Widget _listView() {
