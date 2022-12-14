@@ -2,13 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'course_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class CourseDto {
   @JsonKey(name: "_result")
   Result result;
   List<Course> courses;
+  int courseCount;
 
-  CourseDto(this.result, this.courses);
+  CourseDto(this.result, this.courses, this.courseCount);
   factory CourseDto.fromJson(Map<String, dynamic> json) =>
       _$CourseDtoFromJson(json);
   Map<String, dynamic> toJson() => _$CourseDtoToJson(this);

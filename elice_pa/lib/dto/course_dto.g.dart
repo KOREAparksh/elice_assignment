@@ -11,11 +11,13 @@ CourseDto _$CourseDtoFromJson(Map<String, dynamic> json) => CourseDto(
       (json['courses'] as List<dynamic>)
           .map((e) => Course.fromJson(e as Map<String, dynamic>))
           .toList(),
+      json['course_count'] as int,
     );
 
 Map<String, dynamic> _$CourseDtoToJson(CourseDto instance) => <String, dynamic>{
       '_result': instance.result,
       'courses': instance.courses,
+      'course_count': instance.courseCount,
     };
 
 Result _$ResultFromJson(Map<String, dynamic> json) => Result(

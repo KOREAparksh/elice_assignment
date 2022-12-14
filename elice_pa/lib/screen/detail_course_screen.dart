@@ -1,4 +1,5 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
@@ -13,11 +14,9 @@ enum CourseType { RECOMMEND, FREE }
 class DetailCourseScreen extends StatefulWidget {
   const DetailCourseScreen({
     Key? key,
-    required this.initCourses,
     required this.courseType,
   }) : super(key: key);
   final courseType;
-  final List<Course> initCourses;
   final _title = "무료 과목";
 
   @override
@@ -30,9 +29,10 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       RefreshController(initialRefresh: false);
 
   //Data
-  late final recommendCubit = context.read<RecommendCourseCubit>();
-  late final freeCubit = context.read<FreeCourseCubit>();
+  bool isFirst = true;
+  late final CourseCubit cubit;
   final List<Course> courses = [];
+  bool isAbleLoading = true;
 
   //MarginPadding
   final _listViewSidePadding = 12.0;
@@ -41,8 +41,15 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   @override
   void initState() {
     super.initState();
-    courses.clear();
-    courses.addAll(widget.initCourses);
+    switch (widget.courseType) {
+      case CourseType.RECOMMEND:
+        cubit = context.read<RecommendCourseCubit>();
+        break;
+      case CourseType.FREE:
+        cubit = context.read<FreeCourseCubit>();
+        break;
+    }
+    cubit.getCourse(temp: []);
   }
 
   @override
@@ -56,9 +63,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     return Scaffold(
       backgroundColor: bodyBackgroundColor,
       appBar: _appBar(),
-      body: BlocBuilder<RecommendCourseCubit, RecommendCourseState>(
-        builder: _blocBuilder,
-      ),
+      body: _blocBuilder(),
     );
   }
 
@@ -77,29 +82,54 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     );
   }
 
-  Widget _blocBuilder(context, state) {
-    if (state is RecommendCourseLoaded) {
-      courses.clear();
-      courses.addAll(state.recommendCourses.courses);
+  Widget _blocBuilder() {
+    switch (widget.courseType) {
+      case CourseType.RECOMMEND:
+        return BlocBuilder<RecommendCourseCubit, CourseState>(
+          builder: _builder,
+        );
+      case CourseType.FREE:
+        return BlocBuilder<FreeCourseCubit, CourseState>(
+          builder: _builder,
+        );
+      default:
+        return const Center(child: Text("error"));
     }
-    return _listView();
   }
 
-  Widget _listView() {
+  Widget _builder(context, state) {
+    if (state is CourseLoaded) {
+      courses.clear();
+      courses.addAll(state.courses);
+      isAbleLoading = (state.courseCount <= courses.length) ? false : true;
+      _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
+    } else if (state is CourseError) {
+      //Todo: error dialog
+    } else if (state is CourseLoading && isFirst) {
+      isFirst = false;
+      return const Center(child: CircularProgressIndicator());
+    }
     return Padding(
       padding: EdgeInsets.only(
         left: _listViewSidePadding,
         right: _listViewSidePadding,
         top: _listViewBottomPadding,
       ),
-      child: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _onRefresh,
-        child: ListView.builder(
-          itemCount: courses.length,
-          itemBuilder: _itemBuilder,
-        ),
+      child: _listView(),
+    );
+  }
+
+  Widget _listView() {
+    return SmartRefresher(
+      controller: _refreshController,
+      enablePullDown: true,
+      enablePullUp: isAbleLoading,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: ListView.builder(
+        itemCount: courses.length,
+        itemBuilder: _itemBuilder,
       ),
     );
   }
@@ -116,7 +146,10 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   }
 
   void _onRefresh() {
-    recommendCubit.getRecommendCourse();
-    _refreshController.refreshCompleted();
+    cubit.getCourse(temp: []);
+  }
+
+  void _onLoading() {
+    cubit.getCourse(offset: courses.length, temp: courses);
   }
 }

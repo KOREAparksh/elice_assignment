@@ -1,4 +1,5 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
@@ -17,10 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //Data
-  final List<Course> recommendCourses = [];
-  final List<Course> freeCourses = [];
-
   //MarginPadding
   final _appBarActionPadding = 14.0;
   final _bodyTopPadding = 22.0;
@@ -38,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final recommendCubit = context.read<RecommendCourseCubit>();
-    recommendCubit.getRecommendCourse();
+    recommendCubit.getCourse(temp: []);
     final freeCubit = context.read<FreeCourseCubit>();
-    freeCubit.getFreeCourse();
+    freeCubit.getCourse(temp: []);
   }
 
   @override
@@ -94,7 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DetailCourseScreen(
-          initCourses: recommendCourses,
           courseType: CourseType.RECOMMEND,
         ),
       ),
@@ -106,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DetailCourseScreen(
-          initCourses: freeCourses,
           courseType: CourseType.FREE,
         ),
       ),
@@ -114,13 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget recommendCourseListView() {
-    return BlocBuilder<RecommendCourseCubit, RecommendCourseState>(
+    return BlocBuilder<RecommendCourseCubit, CourseState>(
       builder: (context, state) {
-        if (state is RecommendCourseLoaded) {
-          recommendCourses.clear();
-          recommendCourses.addAll(state.recommendCourses.courses);
-          return CourseListView(courses: recommendCourses);
-        } else if (state is RecommendCourseError) {
+        if (state is CourseLoaded) {
+          return CourseListView(courses: state.courses);
+        } else if (state is CourseError) {
           return Text(state.message);
         }
         return const CircularProgressIndicator();
@@ -129,13 +122,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget freeCourseListView() {
-    return BlocBuilder<FreeCourseCubit, FreeCourseState>(
+    return BlocBuilder<FreeCourseCubit, CourseState>(
       builder: (context, state) {
-        if (state is FreeCourseLoaded) {
-          freeCourses.clear();
-          freeCourses.addAll(state.freeCourses.courses);
-          return CourseListView(courses: freeCourses);
-        } else if (state is FreeCourseError) {
+        if (state is CourseLoaded) {
+          return CourseListView(courses: state.courses);
+        } else if (state is CourseError) {
           return Text(state.message);
         }
         return const CircularProgressIndicator();
