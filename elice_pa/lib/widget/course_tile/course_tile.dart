@@ -21,14 +21,14 @@ class CourseTile extends StatelessWidget {
 
   //Size
   final _tileWidth = 160.0;
-  final _tileTopHeight = 136;
-  final _tileBottomHeight = 64;
+  final _tileTopRatio = 136;
+  final _tileBottomRatio = 64;
   final _tileRadius = const Radius.circular(8);
   final _logoSize = 44.0;
   final _logoRadius = 4.0;
 
   //MarginPadding
-  final _topBottomPadding = 10.0;
+  final _bottomContainerTopBottomPadding = 10.0;
   final _sidePadding = 12.0;
 
   @override
@@ -50,10 +50,10 @@ class CourseTile extends StatelessWidget {
 
   Widget _topContainer() {
     return Expanded(
-      flex: _tileTopHeight,
+      flex: _tileTopRatio,
       child: Container(
         width: _tileWidth,
-        padding: EdgeInsets.all(_sidePadding),
+        padding: EdgeInsets.fromLTRB(_sidePadding, 0, _sidePadding, 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: _tileRadius,
@@ -62,10 +62,10 @@ class CourseTile extends StatelessWidget {
           color: cardBackgroundColor,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CourseLogo(url: url, radius: _logoRadius, width: _logoSize),
-            const SizedBox(height: 14),
+            // const SizedBox(height: 14),
             _courseTitleView()
           ],
         ),
@@ -89,11 +89,15 @@ class CourseTile extends StatelessWidget {
 
   Widget _bottomContainer() {
     return Expanded(
-      flex: _tileBottomHeight,
+      flex: _tileBottomRatio,
       child: Container(
         width: _tileWidth,
         padding: EdgeInsets.fromLTRB(
-            _sidePadding, _topBottomPadding, _sidePadding, _topBottomPadding),
+          _sidePadding,
+          _bottomContainerTopBottomPadding,
+          _sidePadding,
+          _bottomContainerTopBottomPadding,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: _tileRadius,
