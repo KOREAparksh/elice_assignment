@@ -96,26 +96,31 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
 
   Widget _builder(context, state) {
     if (state is CourseLoaded) {
+      courses.clear();
       courses.addAll(state.courses.courses);
-    } else if (state is CourseLoading) {}
-    return _listView();
-  }
-
-  Widget _listView() {
+    } else if (state is CourseError) {
+      //Todo: error dialog
+    } else if (state is CourseLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Padding(
       padding: EdgeInsets.only(
         left: _listViewSidePadding,
         right: _listViewSidePadding,
         top: _listViewBottomPadding,
       ),
-      child: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _onRefresh,
-        child: ListView.builder(
-          itemCount: courses.length,
-          itemBuilder: _itemBuilder,
-        ),
+      child: _listView(),
+    );
+  }
+
+  Widget _listView() {
+    return SmartRefresher(
+      controller: _refreshController,
+      enablePullDown: true,
+      onRefresh: _onRefresh,
+      child: ListView.builder(
+        itemCount: courses.length,
+        itemBuilder: _itemBuilder,
       ),
     );
   }
@@ -131,15 +136,8 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     );
   }
 
-  void _onRefresh() async {
-    switch (widget.courseType) {
-      case CourseType.RECOMMEND:
-        cubit.getCourse();
-        break;
-      case CourseType.FREE:
-        cubit.getCourse();
-        break;
-    }
+  void _onRefresh() {
+    cubit.getCourse(isNew: true);
     courses.clear();
     _refreshController.refreshCompleted();
   }

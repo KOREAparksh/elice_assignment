@@ -8,6 +8,6 @@ part 'course_state.dart';
 abstract class CourseCubit extends Cubit<CourseState> {
   final CourseRepository courseRepository;
 
-  CourseCubit(this.courseRepository) : super(CourseInitial());
-  Future<void> getCourse({int offset = 0, int count = 10});
+  CourseCubit(this.courseRepository) : super(const CourseInitial());
+  Future<void> getCourse({int offset = 0, int count = 10, bool isNew = false});
 }
