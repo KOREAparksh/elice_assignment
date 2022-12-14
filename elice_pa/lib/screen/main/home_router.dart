@@ -30,7 +30,7 @@ class _HomeRouterState extends State<HomeRouter> {
   //Screen
   List<Widget> pages = [
     const HomeScreen(),
-    const QRScanner(),
+    QRScanner(),
   ];
 
   @override
