@@ -82,8 +82,10 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DetailCourseScreen(courses: recommendCourses)));
+                    builder: (context) => DetailCourseScreen(
+                          initCourses: recommendCourses,
+                          courseType: CourseType.RECOMMEND,
+                        )));
           },
         ),
         recommendCourseListView(),
@@ -94,8 +96,10 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        DetailCourseScreen(courses: freeCourses)));
+                    builder: (context) => DetailCourseScreen(
+                          initCourses: freeCourses,
+                          courseType: CourseType.FREE,
+                        )));
           },
         ),
         freeCourseListView(),
@@ -228,7 +232,7 @@ class CourseListView extends StatelessWidget {
           height: _listHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: courses.length,
+            itemCount: (courses.length > 10) ? 10 : courses.length,
             itemBuilder: _itemBuilder,
             separatorBuilder: _separatorBuilder,
           ),
@@ -241,17 +245,15 @@ class CourseListView extends StatelessWidget {
     double leftPadding = (index == 0) ? _sidePadding : 0;
     double rightPadding = (index == courses.length - 1) ? _sidePadding : 0;
     String title = courses[index].title ?? _defaultTitle;
-    String instructors = _defaultInstructor;
-    if (courses[index].instructors.isNotEmpty) {
-      instructors = courses[index].instructors.first.fullname;
-    }
 
     return Container(
       margin: EdgeInsets.only(left: leftPadding, right: rightPadding),
       child: CourseTile(
-        title: title + '\n',
+        title: '$title\n',
         url: courses[index].logoFileUrl ?? _defaultUrl,
-        instructor: instructors,
+        instructor: (courses[index].instructors.isEmpty)
+            ? "선생님 미등록"
+            : "${courses[index].instructors.first.fullname} 선생님",
       ),
     );
   }
@@ -406,6 +408,7 @@ class CourseTile extends StatelessWidget {
         badge,
         style: const TextStyle(
           color: Colors.white,
+          fontWeight: FontWeight.w700,
           fontSize: 10,
         ),
       ),
