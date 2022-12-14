@@ -1,18 +1,8 @@
-import 'dart:io';
-
 import 'package:elice_pa/config/color.dart';
-import 'package:elice_pa/cubit/free_course_cubit.dart';
-import 'package:elice_pa/cubit/recommend_course_cubit.dart';
-import 'package:elice_pa/dto/course_dto.dart';
-import 'package:elice_pa/screen/detail_course_screen.dart';
 import 'package:elice_pa/screen/main/home_screen.dart';
 import 'package:elice_pa/screen/main/qr_scanner.dart';
-import 'package:elice_pa/util/converter.dart';
-import 'package:elice_pa/widget/course_tile/course_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeRouter extends StatefulWidget {
   const HomeRouter({Key? key}) : super(key: key);

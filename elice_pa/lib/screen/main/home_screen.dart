@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailCourseScreen(
+        builder: (context) => const DetailCourseScreen(
           courseType: CourseType.RECOMMEND,
         ),
       ),
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailCourseScreen(
+        builder: (context) => const DetailCourseScreen(
           courseType: CourseType.FREE,
         ),
       ),
