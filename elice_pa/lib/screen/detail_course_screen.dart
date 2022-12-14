@@ -110,7 +110,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       child: DetailCourseTile(
         title: titleConverter(courses[index].title),
         instructor: instructorConverter(courses[index].instructors),
-        url: courses[index].logoFileUrl ?? "",
+        url: courses[index].logoFileUrl,
       ),
     );
   }

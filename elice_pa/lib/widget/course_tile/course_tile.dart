@@ -1,4 +1,5 @@
 import 'package:elice_pa/config/color.dart';
+import 'package:elice_pa/widget/course_tile/course_logo.dart';
 import 'package:elice_pa/widget/course_tile/course_tile_info.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class CourseTile extends StatelessWidget {
   }) : super(key: key);
   final String title;
   final String instructor;
-  final String url;
+  final String? url;
   final String badgeText;
 
   //info
@@ -63,21 +64,11 @@ class CourseTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _courseLogo(),
+            CourseLogo(url: url, radius: _logoRadius, width: _logoSize),
             const SizedBox(height: 14),
             _courseTitleView()
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _courseLogo() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(_logoRadius),
-      child: Container(
-        color: bodyBackgroundColor,
-        child: Image.network(url, width: _logoSize),
       ),
     );
   }

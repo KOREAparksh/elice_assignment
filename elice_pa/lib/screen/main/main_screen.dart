@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   final _sidePadding = 16.0;
 
   //Asset
-  final _logo = "assets/logo.png";
+  final _titleLogo = "assets/logo.png";
 
   //str
   final _recommendTitle = "추천 과목";
@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
       elevation: 0,
       backgroundColor: Colors.white,
       centerTitle: true,
-      title: Image.asset(_logo),
+      title: Image.asset(_titleLogo),
       actions: [
         IconButton(
           icon: Icon(Icons.notifications_none, color: Colors.black54),
@@ -215,11 +215,6 @@ class CourseListView extends StatelessWidget {
   //Data
   final List<Course> courses;
 
-  //String
-  //Todo
-  final _defaultUrl =
-      "https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1568953741/noticon/ufb0f5953bimc1njslya.png";
-
   //Size
   final _listHeight = 200.0;
   final _cardSeparateWidth = 10.0;
@@ -251,7 +246,7 @@ class CourseListView extends StatelessWidget {
       child: CourseTile(
         title: titleConverter(courses[index].title),
         instructor: instructorConverter(courses[index].instructors),
-        url: courses[index].logoFileUrl ?? _defaultUrl,
+        url: courses[index].logoFileUrl,
       ),
     );
   }
