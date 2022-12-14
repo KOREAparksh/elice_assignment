@@ -8,5 +8,7 @@ const Color bodyBackgroundColor = Color(0xffe5e5e5);
 const Color selectedMainColor = Color(0xff524aa1);
 const Color buttonMainColor = Color(0xff564ea9);
 
+const Color appBarMainColor = Color(0xff202044);
+
 //text
 const Color instructorTextColor = Color(0xff797a7b);
