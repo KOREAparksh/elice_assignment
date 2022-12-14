@@ -2,11 +2,8 @@ import 'package:elice_pa/config/color.dart';
 import 'package:elice_pa/cubit/course_cubit.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
-import 'package:elice_pa/dto/course_dto.dart';
-import 'package:elice_pa/screen/detail_course_screen.dart';
-import 'package:elice_pa/util/converter.dart';
+import 'package:elice_pa/screen/course_list_screen.dart';
 import 'package:elice_pa/widget/course_list.dart';
-import 'package:elice_pa/widget/course_tile/course_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -97,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const DetailCourseScreen(
+        builder: (context) => const CourseListScreen(
           courseType: CourseType.RECOMMEND,
         ),
       ),
@@ -108,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const DetailCourseScreen(
+        builder: (context) => const CourseListScreen(
           courseType: CourseType.FREE,
         ),
       ),
