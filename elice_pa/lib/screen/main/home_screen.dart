@@ -18,10 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //Data
-  final List<Course> recommendCourses = [];
-  final List<Course> freeCourses = [];
-
   //MarginPadding
   final _appBarActionPadding = 14.0;
   final _bodyTopPadding = 22.0;
@@ -39,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final recommendCubit = context.read<RecommendCourseCubit>();
-    recommendCubit.getCourse();
+    recommendCubit.getCourse(temp: []);
     final freeCubit = context.read<FreeCourseCubit>();
-    freeCubit.getCourse();
+    freeCubit.getCourse(temp: []);
   }
 
   @override
@@ -116,9 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<RecommendCourseCubit, CourseState>(
       builder: (context, state) {
         if (state is CourseLoaded) {
-          recommendCourses.clear();
-          recommendCourses.addAll(state.courses.courses);
-          return CourseListView(courses: recommendCourses);
+          return CourseListView(courses: state.courses);
         } else if (state is CourseError) {
           return Text(state.message);
         }
@@ -131,9 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<FreeCourseCubit, CourseState>(
       builder: (context, state) {
         if (state is CourseLoaded) {
-          freeCourses.clear();
-          freeCourses.addAll(state.courses.courses);
-          return CourseListView(courses: freeCourses);
+          return CourseListView(courses: state.courses);
         } else if (state is CourseError) {
           return Text(state.message);
         }

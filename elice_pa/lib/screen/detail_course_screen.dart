@@ -29,8 +29,10 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
       RefreshController(initialRefresh: false);
 
   //Data
+  bool isFirst = true;
   late final CourseCubit cubit;
   final List<Course> courses = [];
+  bool isAbleLoading = true;
 
   //MarginPadding
   final _listViewSidePadding = 12.0;
@@ -47,6 +49,7 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
         cubit = context.read<FreeCourseCubit>();
         break;
     }
+    cubit.getCourse(temp: []);
   }
 
   @override
@@ -97,10 +100,14 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   Widget _builder(context, state) {
     if (state is CourseLoaded) {
       courses.clear();
-      courses.addAll(state.courses.courses);
+      courses.addAll(state.courses);
+      isAbleLoading = (state.courseCount <= courses.length) ? false : true;
+      _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
     } else if (state is CourseError) {
       //Todo: error dialog
-    } else if (state is CourseLoading) {
+    } else if (state is CourseLoading && isFirst) {
+      isFirst = false;
       return const Center(child: CircularProgressIndicator());
     }
     return Padding(
@@ -117,7 +124,9 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
     return SmartRefresher(
       controller: _refreshController,
       enablePullDown: true,
+      enablePullUp: isAbleLoading,
       onRefresh: _onRefresh,
+      onLoading: _onLoading,
       child: ListView.builder(
         itemCount: courses.length,
         itemBuilder: _itemBuilder,
@@ -137,8 +146,10 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   }
 
   void _onRefresh() {
-    cubit.getCourse(isNew: true);
-    courses.clear();
-    _refreshController.refreshCompleted();
+    cubit.getCourse(temp: []);
+  }
+
+  void _onLoading() {
+    cubit.getCourse(offset: courses.length, temp: courses);
   }
 }

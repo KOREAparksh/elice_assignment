@@ -14,18 +14,25 @@ class CourseLoading extends CourseState {
 }
 
 class CourseLoaded extends CourseState {
-  final CourseDto courses;
-  const CourseLoaded(this.courses);
+  Result result;
+  final List<Course> courses = [];
+  int courseCount;
 
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is CourseLoaded && o.courses == courses;
+  CourseLoaded(this.result, this.courseCount, List<Course> temp) {
+    courses.addAll(temp);
   }
 
   @override
-  int get hashCode => courses.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CourseLoaded &&
+          runtimeType == other.runtimeType &&
+          result == other.result &&
+          courses == other.courses &&
+          courseCount == other.courseCount;
+
+  @override
+  int get hashCode => result.hashCode ^ courses.hashCode ^ courseCount.hashCode;
 }
 
 class CourseError extends CourseState {
