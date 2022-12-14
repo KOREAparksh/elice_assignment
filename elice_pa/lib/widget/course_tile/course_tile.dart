@@ -75,7 +75,10 @@ class CourseTile extends StatelessWidget {
   Widget _courseLogo() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(_logoRadius),
-      child: Image.network(url, width: _logoSize),
+      child: Container(
+        color: bodyBackgroundColor,
+        child: Image.network(url, width: _logoSize),
+      ),
     );
   }
 
