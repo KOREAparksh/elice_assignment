@@ -64,7 +64,7 @@ class CourseTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CourseLogo(url: url, radius: _logoRadius, width: _logoSize),
+            CourseLogo(url: url, radius: _logoRadius, size: _logoSize),
             // const SizedBox(height: 14),
             _courseTitleView()
           ],

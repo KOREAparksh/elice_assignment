@@ -22,6 +22,7 @@ class DetailCourseTile extends StatelessWidget {
   final _tileRadius = const Radius.circular(12);
   final _tileHeight = 120.0;
   final _tilePadding = 16.0;
+  final _logoHeight = 88.0;
   final _logoRadius = 4.0;
   final _centerDistance = 16.0;
 
@@ -41,7 +42,7 @@ class DetailCourseTile extends StatelessWidget {
               CourseLogo(
                 url: url,
                 radius: _logoRadius,
-                height: double.infinity,
+                size: _logoHeight,
               ),
               SizedBox(width: _centerDistance),
               _infoContainer(),

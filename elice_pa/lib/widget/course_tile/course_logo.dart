@@ -6,15 +6,14 @@ class CourseLogo extends StatelessWidget {
     Key? key,
     required this.url,
     required this.radius,
-    this.width,
-    this.height,
+    required this.size,
     this.backgroundColor = bodyBackgroundColor,
   }) : super(key: key);
   final String? url;
-  final double? width;
-  final double? height;
+  final double size;
   final double radius;
   final Color backgroundColor;
+
   final _default = "assets/default_logo.png";
 
   @override
@@ -29,8 +28,8 @@ class CourseLogo extends StatelessWidget {
         color: bodyBackgroundColor,
         child: Image.network(
           url,
-          width: width,
-          height: height,
+          width: size,
+          height: size,
         ),
       ),
     );
@@ -43,8 +42,8 @@ class CourseLogo extends StatelessWidget {
         color: bodyBackgroundColor,
         child: Image.asset(
           _default,
-          width: width,
-          height: height,
+          width: size,
+          height: size,
         ),
       ),
     );
