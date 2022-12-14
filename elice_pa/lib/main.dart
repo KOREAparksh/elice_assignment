@@ -1,6 +1,7 @@
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/repository/course_repository.dart';
+import 'package:elice_pa/screen/main/home_router.dart';
 import 'package:elice_pa/screen/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MainScreen(),
+        home: const HomeRouter(),
       ),
     );
   }

@@ -5,20 +5,18 @@ import 'package:elice_pa/dto/course_dto.dart';
 import 'package:elice_pa/screen/detail_course_screen.dart';
 import 'package:elice_pa/util/converter.dart';
 import 'package:elice_pa/widget/course_tile/course_tile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   //Data
-  int _selectedIndex = 0;
   final List<Course> recommendCourses = [];
   final List<Course> freeCourses = [];
 
@@ -34,8 +32,6 @@ class _MainScreenState extends State<MainScreen> {
   final _recommendTitle = "추천 과목";
   final _freeTitle = "무료 과목";
   final detailButtonText = "전체보기";
-  final String _bottomNaviHome = "Home";
-  final String _bottomNaviQR = "QR";
 
   @override
   void initState() {
@@ -52,7 +48,6 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: bodyBackgroundColor,
       appBar: _appBar(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 
@@ -80,32 +75,40 @@ class _MainScreenState extends State<MainScreen> {
         SizedBox(height: _bodyTopPadding),
         _courseListTitle(
           title: _recommendTitle,
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailCourseScreen(
-                          initCourses: recommendCourses,
-                          courseType: CourseType.RECOMMEND,
-                        )));
-          },
+          onTap: _goRecommendDetail,
         ),
         recommendCourseListView(),
         SizedBox(height: _bodyTopPadding),
         _courseListTitle(
           title: _freeTitle,
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailCourseScreen(
-                          initCourses: freeCourses,
-                          courseType: CourseType.FREE,
-                        )));
-          },
+          onTap: _goFreeDetail,
         ),
         freeCourseListView(),
       ],
+    );
+  }
+
+  Future<dynamic> _goRecommendDetail() {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailCourseScreen(
+          initCourses: recommendCourses,
+          courseType: CourseType.RECOMMEND,
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> _goFreeDetail() {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailCourseScreen(
+          initCourses: freeCourses,
+          courseType: CourseType.FREE,
+        ),
+      ),
     );
   }
 
@@ -178,31 +181,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
-  }
-
-  Widget _bottomNavigationBar() {
-    return BottomNavigationBar(
-      elevation: 0,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.account_balance_outlined),
-          label: _bottomNaviHome,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.camera_alt_outlined),
-          label: _bottomNaviQR,
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: selectedMainColor,
-      onTap: _onTapNavigatorItem,
-    );
-  }
-
-  void _onTapNavigatorItem(int i) {
-    setState(() {
-      _selectedIndex = i;
-    });
   }
 }
 
