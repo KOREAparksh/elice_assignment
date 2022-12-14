@@ -2,6 +2,7 @@ import 'package:elice_pa/config/color.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
+import 'package:elice_pa/screen/detail_course_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,10 +76,28 @@ class _MainScreenState extends State<MainScreen> {
     return Column(
       children: [
         SizedBox(height: _bodyTopPadding),
-        _courseListTitle(title: _recommendTitle),
+        _courseListTitle(
+          title: _recommendTitle,
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        DetailCourseScreen(courses: recommendCourses)));
+          },
+        ),
         recommendCourseListView(),
         SizedBox(height: _bodyTopPadding),
-        _courseListTitle(title: _freeTitle),
+        _courseListTitle(
+          title: _freeTitle,
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        DetailCourseScreen(courses: freeCourses)));
+          },
+        ),
         freeCourseListView(),
       ],
     );
@@ -114,14 +133,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _courseListTitle({required String title}) {
+  Widget _courseListTitle(
+      {required String title, required VoidCallback onTap}) {
     return Padding(
       padding: EdgeInsets.only(left: _sidePadding, right: _sidePadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _subjectTitle(title),
-          _detailTextButton(),
+          _detailTextButton(onTap),
         ],
       ),
     );
@@ -137,9 +157,9 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _detailTextButton() {
+  Widget _detailTextButton(VoidCallback onTap) {
     return TextButton(
-      onPressed: _onTapDetailButton,
+      onPressed: onTap,
       style: TextButton.styleFrom(
         foregroundColor: buttonMainColor,
         textStyle: Theme.of(context).textTheme.labelMedium,
@@ -178,8 +198,6 @@ class _MainScreenState extends State<MainScreen> {
       _selectedIndex = i;
     });
   }
-
-  void _onTapDetailButton() {}
 }
 
 class CourseListView extends StatelessWidget {
