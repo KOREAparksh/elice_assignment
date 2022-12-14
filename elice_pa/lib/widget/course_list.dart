@@ -19,6 +19,7 @@ class CourseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //임시
     return (courses.isEmpty)
         ? Center(
             child: Text("텅..."),
