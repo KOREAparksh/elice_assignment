@@ -46,7 +46,7 @@ Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
 
 Instructor _$InstructorFromJson(Map<String, dynamic> json) => Instructor(
       json['id'] as int,
-      json['fullname'] as String,
+      json['fullname'] as String?,
       json['firstname'] as String,
     );
 

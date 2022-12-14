@@ -40,7 +40,7 @@ class Course {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Instructor {
   int id;
-  String fullname;
+  String? fullname;
   String firstname;
 
   Instructor(this.id, this.fullname, this.firstname);
