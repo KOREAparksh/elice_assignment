@@ -19,14 +19,11 @@ class CourseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: _listHeight),
-      child: (courses.isEmpty)
-          ? Center(
-              child: Text("텅..."),
-            )
-          : _listview(),
-    );
+    return (courses.isEmpty)
+        ? Center(
+            child: Text("텅..."),
+          )
+        : _listview();
   }
 
   Widget _listview() {

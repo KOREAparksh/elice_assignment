@@ -22,6 +22,9 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 
+  //Size
+  final _listHeight = 200.0;
+
   //MarginPadding
   final _appBarActionPadding = 14.0;
   final _bodyTopPadding = 22.0;
@@ -113,28 +116,34 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget recommendCourseListView() {
-    return BlocBuilder<RecommendCourseCubit, CourseState>(
-      builder: (context, state) {
-        if (state is CourseLoaded) {
-          return CourseListView(courses: state.courses);
-        } else if (state is CourseError) {
-          return Text(state.message);
-        }
-        return const CircularProgressIndicator();
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: _listHeight),
+      child: BlocBuilder<RecommendCourseCubit, CourseState>(
+        builder: (context, state) {
+          if (state is CourseLoaded) {
+            return CourseListView(courses: state.courses);
+          } else if (state is CourseError) {
+            return Text(state.message);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
   Widget freeCourseListView() {
-    return BlocBuilder<FreeCourseCubit, CourseState>(
-      builder: (context, state) {
-        if (state is CourseLoaded) {
-          return CourseListView(courses: state.courses);
-        } else if (state is CourseError) {
-          return Text(state.message);
-        }
-        return const CircularProgressIndicator();
-      },
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: _listHeight),
+      child: BlocBuilder<FreeCourseCubit, CourseState>(
+        builder: (context, state) {
+          if (state is CourseLoaded) {
+            return CourseListView(courses: state.courses);
+          } else if (state is CourseError) {
+            return Text(state.message);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
