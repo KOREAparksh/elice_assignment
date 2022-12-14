@@ -6,8 +6,8 @@ part 'course_dto.g.dart';
 class CourseDto {
   @JsonKey(name: "_result")
   Result result;
-  List<Course> courses;
-  int courseCount;
+  List<Course>? courses;
+  int? courseCount;
 
   CourseDto(this.result, this.courses, this.courseCount);
   factory CourseDto.fromJson(Map<String, dynamic> json) =>

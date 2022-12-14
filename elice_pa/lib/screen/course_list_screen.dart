@@ -109,7 +109,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
       _refreshController.refreshCompleted();
       _refreshController.loadComplete();
     } else if (state is CourseError) {
-      //Todo: error dialog
+      return Center(child: Text(state.message.toString()));
     } else if (state is CourseLoading && isFirst) {
       isFirst = false;
       return const Center(child: CircularProgressIndicator());
