@@ -1,10 +1,25 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:elice_pa/screen/main/custo_web_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class QRScanner extends StatelessWidget {
+class QRScanner extends StatefulWidget {
   const QRScanner({Key? key}) : super(key: key);
 
+  @override
+  State<QRScanner> createState() => _QRScannerState();
+}
+
+class _QRScannerState extends State<QRScanner> {
   final _title = "QR";
+
+  //data
+  final MobileScannerController cameraController = MobileScannerController();
+  bool isFind = false;
 
   //String
   final _guideText = "QR 코드를 인식해주세요";
@@ -16,6 +31,20 @@ class QRScanner extends StatelessWidget {
   final _guideTopRatio = 77;
   final _guideBottomRatio = 190;
 
+  //
+
+  @override
+  void initState() {
+    super.initState();
+    print(cameraController.isStarting);
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +52,7 @@ class QRScanner extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          _mobileScanner(),
+          _mobileScanner(context),
           _guide(),
         ],
       ),
@@ -46,27 +75,41 @@ class QRScanner extends StatelessWidget {
     );
   }
 
-  Widget _mobileScanner() {
+  Widget _mobileScanner(context) {
     return MobileScanner(
+      controller: cameraController,
       allowDuplicates: false,
-      onDetect: (barcode, args) {
-        if (barcode.rawValue == null) {
-          debugPrint('Failed to scan Barcode');
+      onDetect: (barcode, args) async {
+        if (barcode.rawValue == null ||
+            barcode.format != BarcodeFormat.qrCode ||
+            isFind) {
           return;
         }
-        final String code = barcode.rawValue!;
-        debugPrint('Barcode found! $code');
-        if (isUrl(barcode)) {}
-        if (isText(barcode)) {}
+        cameraController.stop();
+        isFind = true;
+        await _goWebView(barcode);
+        isFind = false;
+        cameraController.start();
       },
     );
   }
 
-  //Todo: 분리
-  bool isUrl(Barcode barcode) {
-    if (barcode.format != BarcodeFormat.qrCode) {
-      return false;
+  Future<void> _goWebView(Barcode barcode) async {
+    String decoded = barcode.rawValue!;
+    if (isText(barcode)) {
+      decoded = utf8.decode(base64Decode(barcode.rawValue!));
+    } else if (isUrl(barcode) == false) {
+      return;
     }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CustomWebView(url: decoded),
+      ),
+    );
+  }
+
+  bool isUrl(Barcode barcode) {
     if (barcode.type != BarcodeType.url) {
       return false;
     }
@@ -74,9 +117,6 @@ class QRScanner extends StatelessWidget {
   }
 
   bool isText(Barcode barcode) {
-    if (barcode.format != BarcodeFormat.qrCode) {
-      return false;
-    }
     if (barcode.type != BarcodeType.text) {
       return false;
     }
