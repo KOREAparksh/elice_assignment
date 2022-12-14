@@ -3,6 +3,7 @@ import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
 import 'package:elice_pa/screen/detail_course_screen.dart';
+import 'package:elice_pa/util/converter.dart';
 import 'package:elice_pa/widget/course_tile/course_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -215,8 +216,7 @@ class CourseListView extends StatelessWidget {
   final List<Course> courses;
 
   //String
-  final _defaultInstructor = "선생님 미등록";
-  final _defaultTitle = "제목이 정해지지 않음";
+  //Todo
   final _defaultUrl =
       "https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1568953741/noticon/ufb0f5953bimc1njslya.png";
 
@@ -245,16 +245,13 @@ class CourseListView extends StatelessWidget {
   Widget _itemBuilder(BuildContext context, int index) {
     double leftPadding = (index == 0) ? _sidePadding : 0;
     double rightPadding = (index == courses.length - 1) ? _sidePadding : 0;
-    String title = courses[index].title ?? _defaultTitle;
 
     return Container(
       margin: EdgeInsets.only(left: leftPadding, right: rightPadding),
       child: CourseTile(
-        title: '$title\n',
+        title: titleConverter(courses[index].title),
+        instructor: instructorConverter(courses[index].instructors),
         url: courses[index].logoFileUrl ?? _defaultUrl,
-        instructor: (courses[index].instructors.isEmpty)
-            ? "선생님 미등록"
-            : "${courses[index].instructors.first.fullname} 선생님",
       ),
     );
   }

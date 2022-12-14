@@ -7,7 +7,7 @@ class CourseTile extends StatelessWidget {
     Key? key,
     required this.title,
     required this.url,
-    this.instructor = "선생님 미등록",
+    required this.instructor,
     this.badgeText = "오프라인",
   }) : super(key: key);
   final String title;

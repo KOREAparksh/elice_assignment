@@ -2,6 +2,7 @@ import 'package:elice_pa/config/color.dart';
 import 'package:elice_pa/cubit/free_course_cubit.dart';
 import 'package:elice_pa/cubit/recommend_course_cubit.dart';
 import 'package:elice_pa/dto/course_dto.dart';
+import 'package:elice_pa/util/converter.dart';
 import 'package:elice_pa/widget/course_tile/detail_course_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,10 +25,6 @@ class DetailCourseScreen extends StatefulWidget {
 }
 
 class _DetailCourseScreenState extends State<DetailCourseScreen> {
-  //String
-  final _defaultTitle = "제목 미정";
-  final _defaultInstructor = "선생님 미등록";
-
   //Controller
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -108,15 +105,12 @@ class _DetailCourseScreenState extends State<DetailCourseScreen> {
   }
 
   Widget _itemBuilder(_, int index) {
-    final String title = courses[index].title ?? _defaultTitle;
     return Container(
       margin: EdgeInsets.only(bottom: _listViewBottomPadding),
       child: DetailCourseTile(
-        title: ("$title\n"),
+        title: titleConverter(courses[index].title),
+        instructor: instructorConverter(courses[index].instructors),
         url: courses[index].logoFileUrl ?? "",
-        instructor: (courses[index].instructors.isEmpty)
-            ? _defaultInstructor
-            : "${courses[index].instructors.first.fullname} 선생님",
       ),
     );
   }
