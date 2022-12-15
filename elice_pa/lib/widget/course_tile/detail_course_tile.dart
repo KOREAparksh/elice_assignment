@@ -33,21 +33,37 @@ class DetailCourseTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(_tileRadius),
       ),
-      child: SizedBox(
-        height: _tileHeight,
-        child: Padding(
-          padding: EdgeInsets.all(_tilePadding),
-          child: Row(
-            children: [
-              CourseLogo(
-                url: url,
-                radius: _logoRadius,
-                size: _logoHeight,
-              ),
-              SizedBox(width: _centerDistance),
-              _infoContainer(),
-            ],
-          ),
+      child: InkWell(
+        onTap: () => showTouchable(context),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: _tile(),
+      ),
+    );
+  }
+
+// 과제요구사항을 위한 임시 메소드
+  void showTouchable(context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Touch!"), duration: Duration(milliseconds: 500)));
+  }
+
+  SizedBox _tile() {
+    return SizedBox(
+      height: _tileHeight,
+      child: Padding(
+        padding: EdgeInsets.all(_tilePadding),
+        child: Row(
+          children: [
+            CourseLogo(
+              url: url,
+              radius: _logoRadius,
+              size: _logoHeight,
+            ),
+            SizedBox(width: _centerDistance),
+            _infoContainer(),
+          ],
         ),
       ),
     );
