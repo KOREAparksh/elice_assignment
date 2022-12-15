@@ -132,6 +132,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
         itemCount: courses.length,
         itemBuilder: _itemBuilder,
       ),

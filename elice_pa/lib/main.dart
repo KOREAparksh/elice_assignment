@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<CourseCubit>(
-          create: (_) => RecommendCourseCubit(CourseRepository()),
-        ),
         BlocProvider<RecommendCourseCubit>(
           create: (_) => RecommendCourseCubit(CourseRepository()),
         ),
