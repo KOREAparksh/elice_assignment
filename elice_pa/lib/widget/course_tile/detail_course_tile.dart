@@ -10,12 +10,14 @@ class DetailCourseTile extends StatelessWidget {
     required this.title,
     required this.instructor,
     required this.url,
+    required this.isDiscounted,
     this.badgeText = "오프라인",
   }) : super(key: key);
   final String title;
   final String instructor;
   final String? url;
   final String badgeText;
+  final bool isDiscounted;
 
   //Size
   final _cardElevation = 0.0;
@@ -46,7 +48,8 @@ class DetailCourseTile extends StatelessWidget {
   void showTouchable(context) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Touch!"), duration: Duration(milliseconds: 500)));
+        content: Text("isDiscounted? : $isDiscounted"),
+        duration: Duration(milliseconds: 500)));
   }
 
   SizedBox _tile() {
