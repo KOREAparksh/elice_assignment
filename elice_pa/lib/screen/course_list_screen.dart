@@ -145,6 +145,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
         title: titleConverter(courses[index].title),
         instructor: instructorConverter(courses[index].instructors),
         url: courses[index].logoFileUrl,
+        isDiscounted: courses[index].isDiscounted,
       ),
     );
   }

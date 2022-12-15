@@ -32,6 +32,7 @@ class CourseListView extends StatelessWidget {
       height: _listHeight,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
         itemCount: (courses.length > 10) ? 10 : courses.length,
         itemBuilder: _itemBuilder,
         separatorBuilder: _separatorBuilder,

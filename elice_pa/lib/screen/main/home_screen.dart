@@ -72,21 +72,24 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _body() {
-    return Column(
-      children: [
-        SizedBox(height: _bodyTopPadding),
-        _courseListTitle(
-          title: _recommendTitle,
-          onTap: _goRecommendDetail,
-        ),
-        recommendCourseListView(),
-        SizedBox(height: _bodyTopPadding),
-        _courseListTitle(
-          title: _freeTitle,
-          onTap: _goFreeDetail,
-        ),
-        freeCourseListView(),
-      ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Column(
+        children: [
+          SizedBox(height: _bodyTopPadding),
+          _courseListTitle(
+            title: _recommendTitle,
+            onTap: _goRecommendDetail,
+          ),
+          recommendCourseListView(),
+          SizedBox(height: _bodyTopPadding),
+          _courseListTitle(
+            title: _freeTitle,
+            onTap: _goFreeDetail,
+          ),
+          freeCourseListView(),
+        ],
+      ),
     );
   }
 

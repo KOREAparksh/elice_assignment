@@ -39,13 +39,25 @@ class CourseTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(_tileRadius),
       ),
-      child: Column(
-        children: [
-          _topContainer(),
-          _bottomContainer(),
-        ],
+      child: InkWell(
+        onTap: () => showTouchable(context),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Column(
+          children: [
+            _topContainer(),
+            _bottomContainer(),
+          ],
+        ),
       ),
     );
+  }
+
+// 과제요구사항을 위한 임시 메소드
+  void showTouchable(context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Touch!"), duration: Duration(milliseconds: 500)));
   }
 
   Widget _topContainer() {
