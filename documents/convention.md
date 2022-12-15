@@ -6,7 +6,9 @@ main branch에 직접 commit
 - 프로젝트 설정 후
 branch를 분리하여 코드작업 진행
   - dev
-  - ec-이슈번호
+  - {주 개발 목적}-{브랜치이름}
+
+  문서작업의 경우 dev/main에 바로
 - 개발 완료 후
 main branch에 직접 commit
 
