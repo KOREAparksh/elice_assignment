@@ -8,10 +8,10 @@ part of 'course_dto.dart';
 
 CourseDto _$CourseDtoFromJson(Map<String, dynamic> json) => CourseDto(
       Result.fromJson(json['_result'] as Map<String, dynamic>),
-      (json['courses'] as List<dynamic>)
-          .map((e) => Course.fromJson(e as Map<String, dynamic>))
+      (json['courses'] as List<dynamic>?)
+          ?.map((e) => Course.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['course_count'] as int,
+      json['course_count'] as int?,
     );
 
 Map<String, dynamic> _$CourseDtoToJson(CourseDto instance) => <String, dynamic>{

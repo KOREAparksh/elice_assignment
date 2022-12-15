@@ -19,18 +19,24 @@ class CourseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: _listHeight,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: (courses.length > 10) ? 10 : courses.length,
-            itemBuilder: _itemBuilder,
-            separatorBuilder: _separatorBuilder,
-          ),
-        ),
-      ],
+    //임시
+    return (courses.isEmpty)
+        ? Center(
+            child: Text("텅..."),
+          )
+        : _listview();
+  }
+
+  Widget _listview() {
+    return SizedBox(
+      height: _listHeight,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: (courses.length > 10) ? 10 : courses.length,
+        itemBuilder: _itemBuilder,
+        separatorBuilder: _separatorBuilder,
+      ),
     );
   }
 

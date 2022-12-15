@@ -12,12 +12,15 @@ class FreeCourseCubit extends CourseCubit {
       emit(const CourseLoading());
       await Future.delayed(const Duration(milliseconds: 500));
       final courseDto = await courseRepository.fetchFreeCourse(offset, count);
-      temp.addAll(courseDto.courses);
-      emit(CourseLoaded(courseDto.result, courseDto.courseCount, temp));
+      if (courseDto.result.status != "ok") {
+        throw Exception("api result not ok");
+      }
+      temp.addAll(courseDto.courses ?? []);
+      emit(CourseLoaded(courseDto.result, courseDto.courseCount ?? 0, temp));
     } on DioError catch (e) {
       emit(CourseError(e.message));
     } catch (e) {
-      emit(const CourseError("Other Error"));
+      emit(CourseError(e.toString()));
     }
   }
 }
