@@ -4,6 +4,9 @@
 <div>
 <img src="https://raw.githubusercontent.com/KOREAparksh/elice_assignment/main/assets/flutter_doctor.png" width="50%"></div>
 
+## 빌드 전 확인사항
+1. .env-sample파일을 복사하여 .env파일 생성
+2. .env파일 내 api주소 입력
 
 ## 일정 및 TodoList
 1. 12/12(월)
